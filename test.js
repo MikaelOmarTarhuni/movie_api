@@ -1,12 +1,12 @@
 //Import express
 const express = require('express'),
-const app = express();
-morgan = require('morgan');
+app = express();
+ morgan = require('morgan');
+
   bodyParser = require('body-parser'),
   uuid = require('uuid');
 
 app.use(morgan('common'));
-
 app.use(bodyParser.json());
 
 let topMovies = [
@@ -30,7 +30,7 @@ let topMovies = [
 	},
 	{
 		title: 'Heat',
-		description:'',
+		description:' jhftuddudtd',
 		genre: 'crime',
 		director: 'Michael Mann'
 	},
