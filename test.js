@@ -1,11 +1,11 @@
 //Import express
 const express = require("express"),
 app = express(),
-
+path = require("path"),
  morgan = require("morgan"),
   bodyParser = require("body-parser"),
   uuid = require("uuid");
-
+  const { check, validationResult } = require('express-validator'); 
 
 
 const mongoose = require('mongoose');
@@ -20,26 +20,30 @@ app.use(morgan("common"));
 mongoose.connect('mongodb://localhost:27017/myFlixDB', {
    useNewUrlParser: true, useUnifiedTopology: true });
 
-
+   mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 app.use(express.json());
-
+const app = express();
+const cors = require('cors');
 
 //sreve documentation.html from ´/public´
 app.use(express.static("public"))
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
+const cors = require('cors');
+app.use(cors());
+
 
 // GET requests 
 app.get('/', (req, res) => {
   res.send('Welcome to my Movie Database');
 });
+
 //var movie1 = {
 //	Title: "Silence of the Lambs",
 //	Description: "A young FBI cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer.",
@@ -343,7 +347,9 @@ Users.findOne({
   })
   .then((user) => {
 	res.json(user);
-  }).catch((err) => {
+  })
+  
+  .catch((err) => {
 	console.error(err);
 	res.status(500).send('Error: ' + err);
   });
