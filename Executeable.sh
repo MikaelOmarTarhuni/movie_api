@@ -1,1 +1,1 @@
-node test.js
+node index.js
