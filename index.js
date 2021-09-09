@@ -187,17 +187,16 @@ app.get('/genre',passport.authenticate('jwt',{
 // Allow new users to register
 app.post('/users',
 	[
-		check('username','username is requird').isLength({min:5}),
-		check('username','username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-		check('password', 'password is required').not().isEmpty(),
-		check('email','email does not appear to be valid').isEmail()
-	],
-	 (req, res) => {
-  let errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({errors: errors.array() });
-  }
+		check('Username','username is requird').isLength({min: 5}),
+		check('Username','username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+		check('Password', 'password is required').not().isEmpty(),
+		check('Email','email does not appear to be valid').isEmail()
+	],(req, res) => {
+		let errors = validationResult(req);
+		
+		if (!errors.isEmpty()) {
+			return res.status(422).json({errors: errors.array() });
+		}
 
   // Username, Password, Email
 
@@ -209,10 +208,10 @@ app.post('/users',
     }
     else {
       User.create({
-        username: req.body.username,
-        password: hashedPassword,
-        email: req.body.email,
-        bithday: req.body.birthday
+        Username: req.body.username,
+        Password: hashedPassword,
+        Email: req.body.email,
+        Bithday: req.body.birthday
     })
       .then((user) => {
         res.status(201).json(user);
