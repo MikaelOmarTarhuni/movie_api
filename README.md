@@ -2,7 +2,7 @@
  
 # Description:
 
-Welcome To my server-side project for the “movies” web application. The web application will provide users with access to information about classic movies, directors, and genres. Users will be able to sign up, update their personal information, and create a list of their favorite top movies.
+Welcome To my server-side project for “movies” web application. The web application will provide users with access to information about classic movies, directors, and genres. Users will be able to sign up, update their personal information, and create a list of their favorite top movies.
 
 # User Stories:
 
