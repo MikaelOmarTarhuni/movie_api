@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const Models = require('./models.js');
 // const cors = require('cors');
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://myflixdb-mikael.herokuapp.com/', 'http://localhost:1234'];
+let allowedOrigins = ['http://localhost:8080', 'https://myflixdb-mikael.herokuapp.com/', 'http://localhost:1234'];
 app.use(cors({
 	origin: (origin, callback) => {
 	  if(!origin) return callback(null, true);
