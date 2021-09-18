@@ -60,14 +60,16 @@ app.get('/', (req, res) => {
 
 
   // Get all Movies
-app.get("/movies", function (req, res) {
+app.get("/movies",passport.authenticate('jwt',{
+	session:false
+}), (req, res) => {
 	Movies.find()
 	.then(function (movies) {
-	res.status(201).json(movies);
+		res.status(201).json(movies);
 	})
 	.catch(function (error) {
-	console.error(error);
-	res.status(500).send("Error: " + error);
+		console.error(error);
+		res.status(500).send("Error: " + error);
 	});
 });
 
@@ -246,7 +248,7 @@ Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
 });
 
 // Add a movie to a user's list 
-app.put('/user/:username/addFavorite/:addFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/user/:username/favoriteMovies/:addFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 	  {Username: req.params.username},
 	  {$push: {favoriteMovies: req.params.addFavorite}},
@@ -264,7 +266,7 @@ app.put('/user/:username/addFavorite/:addFavorite', passport.authenticate('jwt',
   });
   
   // Remove a movie to a user's list 
-  app.put('/user/:Username/removeFavorite/:removeFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
+  app.put('/user/:Username/favoriteMovies/:removeFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 	  {Username: req.params.Username},
 	  {$pull: {favoriteMovies: req.params.removeFavorite}},
