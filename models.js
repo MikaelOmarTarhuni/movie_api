@@ -44,11 +44,14 @@ let userSchema = mongoose.Schema({
   });
 
 // Director Schema 
-  let directorSchema = mongoose.Schema({
-    Name: {type: String, required: true},
-    Bio: {type: String, required: true},
-    Born: Date
-  });
+let directorSchema = mongoose.Schema({
+  Name: { type: String, required: true },
+  Bio: { type: String, required: true },
+  Birth: { type: String, required: true },
+  Death: { type: String },
+  Films: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }]
+});
+
   
   let Movie = mongoose.model('Movie', movieSchema);
   let User = mongoose.model('User', userSchema);

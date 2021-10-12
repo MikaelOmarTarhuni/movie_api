@@ -31,8 +31,15 @@ const Directors = Models.Director;
 
 app.use(morgan("common"));
 
-// mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true, useUnifiedTopology: true });
+//mongoose.connect('mongodb://localhost:27017/myFlixDB', {useNewUrlParser: true, useUnifiedTopology: true });
 
+// Comment this before puhsing to HEROKU
+// mongoose.connect('mongodb+srv://MikaelOmarTarhuni:MA278de@myowncluster.j1y2h.mongodb.net/myFlixDB?retryWrites=true&w=majority',{useNewUrlParser: true, useUnifiedTopology: true });
+
+// import example
+// mongoimport --uri mongodb+srv://MikaelOmarTarhuni:MA278de@myowncluster.j1y2h.mongodb.net/myFlixDB --collection directors --type JSON --file C:\Users\User\Documents\careerfoundry\tasks\collections\director.json
+
+// Uncomment this before pushing to HEROKU
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Middleware
@@ -60,16 +67,16 @@ app.get('/', (req, res) => {
 
 
   // Get all Movies
-app.get('/movies',passport.authenticate('jwt',{
+app.get("/movies",passport.authenticate('jwt',{
 	session:false
 }), (req, res) => {
 	Movies.find()
-	.then((movies) => {
+	.then(function (movies) {
 		res.status(201).json(movies);
 	})
-	.catch((err) => {
-		console.error(err);
-		res.status(500).send('Error: ' + err);
+	.catch(function (error) {
+		console.error(error);
+		res.status(500).send("Error: " + error);
 	});
 });
 
@@ -80,7 +87,7 @@ app.get('/movies/:title/',passport.authenticate('jwt',{
 }), (req, res) => {
   console.log(req.params,'movie request')
   Movies.findOne({ 
-      title: req.params.title
+      Title: req.params.title
     })
     .then((movie) => {
       res.json(movie);
@@ -111,7 +118,7 @@ app.get('/directors',passport.authenticate('jwt',{
 	session:false
   }), (req, res) => {
 	Directors.findOne({
-		'Director.Name': req.params.Name
+		'Name': req.params.Name
 	  })
 	  .then((director) => {
 		res.json(director);
@@ -248,10 +255,10 @@ Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
 });
 
 // Add a movie to a user's list 
-app.put('/user/:username/favoriteMovies/:addFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
-	  {Username: req.params.username},
-	  {$push: {favoriteMovies: req.params.addFavorite}},
+	  {Username: req.params.Username},
+	  {$push: {FavoriteMovies: req.params.MovieID}},
 	  {new: true},
 	  (err, updatedUser) => {
 		if (err) {
@@ -266,10 +273,10 @@ app.put('/user/:username/favoriteMovies/:addFavorite', passport.authenticate('jw
   });
   
   // Remove a movie to a user's list 
-  app.put('/user/:Username/favoriteMovies/:removeFavorite', passport.authenticate('jwt', { session: false }), (req, res) => {
+  app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
 	Users.findOneAndUpdate(
 	  {Username: req.params.Username},
-	  {$pull: {favoriteMovies: req.params.removeFavorite}},
+	  {$pull: {FavoriteMovies: req.params.removeFavorite}},
 	  {new: true},
 	  (err, updatedUser) => {
 		if (err) {
@@ -307,6 +314,7 @@ app.use((err, req, res, next) => {
 
 
 const port = process.env.PORT || 8080;
+
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
